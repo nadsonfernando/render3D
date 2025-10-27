@@ -1,0 +1,36 @@
+{
+  "expo": {
+    "name": "plein-air",
+    "slug": "plein-air",
+    "version": "1.0.0",
+    "orientation": "default",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "scheme": "pleinair",
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.pleinair"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      },
+      "package": "com.pleinair"
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    },
+    "plugins": [
+      "expo-asset",
+      [
+        "expo-splash-screen",
+        {
+          "backgroundColor": "#ffffff",
+          "image": "./assets/splash-icon.png"
+        }
+      ]
+    ]
+  }
+}
