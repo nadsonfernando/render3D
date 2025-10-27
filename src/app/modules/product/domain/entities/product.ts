@@ -2,9 +2,11 @@ export interface ProductEntity {
   id: number;
   title: string;
   description: string;
+  brand: string;
+  thumbnail: string;
   category: string;
-  price: 9.99;
+  price: number;
   discountPercentage: number;
-  rating: 2.56;
-  stock: 99;
+  rating: number;
+  stock: number;
 }

@@ -3,11 +3,11 @@ import { SchemaColors } from '@theme/color/schemes/types/colors';
 export const darkSchemaColor: SchemaColors = {
   primary: '#4ADE80',
   secondary: '#F87171',
-  alert: '#FBBF24',
-  background: '#0F172A',
-  textPrimary: '#F9FAFB',
-  textSecondary: '#94A3B8',
-  divider: '#334155',
+  alert: '#FACC15',
+  background: '#0B1120',
   surface: '#1E293B',
-  shadow: '#ccc',
+  textPrimary: '#F9FAFB',
+  textSecondary: '#CBD5E1',
+  divider: '#334155',
+  shadow: '#00000080',
 };

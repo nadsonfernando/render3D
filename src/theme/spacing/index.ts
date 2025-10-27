@@ -4,16 +4,16 @@ export const spacing: Spacing = {
   padding: {
     xs: 6,
     sm: 10,
-    lg: 24,
+    lg: 22,
   },
   margin: {
-    xs: 12,
-    sm: 16,
-    lg: 24,
+    xs: 8,
+    sm: 12,
+    lg: 22,
   },
   borderRadius: {
     xs: 2,
     sm: 4,
-    lg: 8,
+    lg: 14,
   },
 };

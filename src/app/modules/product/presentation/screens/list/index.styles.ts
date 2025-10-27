@@ -1,6 +1,7 @@
-import { ProductEntity } from '@app/modules/product/domain/entities/product';
 import { FlatList } from 'react-native';
 import styled from 'styled-components/native';
+
+import { ProductEntity } from '@app/modules/product/domain/entities/product';
 
 export const Wrapper = styled.View`
   flex: 1;
