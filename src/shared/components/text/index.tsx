@@ -4,7 +4,7 @@ import { SchemaColors } from '@theme/color/schemes/types/colors';
 
 export interface TextProps extends PropsWithChildren {
   color: keyof SchemaColors;
-  variation: 'xs-r' | 'sm-r' | 'lg-r' | 'xs-b' | 'sm-b' | 'lg-b';
+  variation: 'xs-r' | 'sm-r' | 'lg-r' | 'xs-b' | 'sm-b' | 'lg-b' | 'lgx-b';
 }
 
 export function Text({ children, color, variation, ...props }: TextProps) {

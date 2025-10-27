@@ -4,6 +4,7 @@ export const darkSchemaColor: SchemaColors = {
   primary: '#4ADE80',
   secondary: '#F87171',
   alert: '#FACC15',
+  white: '#FFFFFF',
   background: '#0B1120',
   surface: '#1E293B',
   textPrimary: '#F9FAFB',

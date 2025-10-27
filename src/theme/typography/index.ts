@@ -32,4 +32,9 @@ export const typography: Typography = {
     fontWeight: 600,
     fontFamily: 'System',
   },
+  'lgx-b': {
+    size: 30,
+    fontWeight: 600,
+    fontFamily: 'System',
+  },
 };
