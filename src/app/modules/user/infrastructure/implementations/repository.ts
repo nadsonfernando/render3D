@@ -1,4 +1,3 @@
-import { IProducts } from '@app/modules/product/domain/models/products';
 import { IUserRepository } from '@app/modules/user/domain/specifications/repository';
 import { UserEntity } from '@app/modules/user/domain/entities/user';
 
