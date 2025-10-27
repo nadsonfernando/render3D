@@ -1,65 +1,191 @@
-# Starter Template with React Navigation
+# Plein Air
 
-This is a minimal starter template for React Native apps using Expo and React Navigation.
+Aplicação mobile React Native construída com Expo, demonstrando a implementação de **Clean Architecture** com princípios de Domain-Driven Design.
 
-It includes the following:
+## Arquitetura
 
-- Example [Native Stack](https://reactnavigation.org/docs/native-stack-navigator) with a nested [Bottom Tab](https://reactnavigation.org/docs/bottom-tab-navigator)
-- Web support with [React Native for Web](https://necolas.github.io/react-native-web/)
-- TypeScript support and configured for React Navigation
-- Automatic [deep link](https://reactnavigation.org/docs/deep-linking) and [URL handling configuration](https://reactnavigation.org/docs/configuring-links)
-- Theme support [based on system appearance](https://reactnavigation.org/docs/themes/#using-the-operating-system-preferences)
-- Expo [Development Build](https://docs.expo.dev/develop/development-builds/introduction/) with [Continuous Native Generation](https://docs.expo.dev/workflow/continuous-native-generation/)
+Este projeto implementa os conceitos de [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html), organizando o código em camadas bem definidas e promove:
 
-## Getting Started
+- **Independência de Frameworks**: A lógica de negócio não depende de bibliotecas externas
+- **Testabilidade**: Regras de negócio podem ser testadas sem UI, banco de dados ou elementos externos
+- **Independência de UI**: A interface pode mudar sem alterar o resto do sistema
+- **Independência de Banco de Dados**: Regras de negócio não estão acopladas ao banco de dados
+- **Independência de Agentes Externos**: Regras de negócio não sabem nada sobre o mundo externo
 
-1. Create a new project using this template:
+### Estrutura de Módulos
 
-   ```sh
-   npx create-expo-app@latest --template react-navigation/template
-   ```
+Cada funcionalidade segue a organização em camadas concêntricas:
 
-2. Edit the `app.json` file to configure the `name`, `slug`, `scheme` and bundle identifiers (`ios.bundleIdentifier` and `android.bundleIdentifier`) for your app.
+```
+src/app/modules/{feature}/
+├── domain/              # Camada mais interna - Regras de Negócio
+│   ├── entities/        # Entidades de negócio
+│   ├── models/          # Modelos de dados 
+│   └── specifications/  # Interfaces de repositórios (contratos)
+│
+├── useCases/            # Casos de Uso - Lógica de Aplicação
+│   └── {action}/        # Cada caso de uso específico
+│       ├── index.ts     # Injeção de dependências
+│       └── {action}.ts  # Implementação do caso de uso
+│
+├── infrastructure/      # Camada Externa - Implementações
+│   └── implementations/ # Implementações concretas dos repositórios
+│
+├── presentation/        # Camada de Interface
+│   ├── screens/         # Telas da aplicação
+│   ├── components/      # Componentes específicos do módulo
+│   └── route/           # Configuração de rotas
+│
+└── store/               # Gerenciamento de Estado
+    └── query/           # React Query hooks
+```
 
-3. Edit the `src/App.tsx` file to start working on your app.
+## Benefícios da Arquitetura Implementada
 
-## Running the app
+### Inversão de Dependências
 
-- Install the dependencies:
+O projeto demonstra **Injeção de Dependências** através da inversão de controle:
+
+```typescript
+// Domain define o contrato (interface)
+interface IProductRepository {
+  findAll(skip: number, limit: number): Promise<IHttpResponse<IProducts>>;
+}
+
+// Use Case depende da abstração, não da implementação
+class FindProductsBySkipUseCase {
+  constructor(private productRepository: IProductRepository) {}
+  // ...
+}
+
+// Infrastructure implementa o contrato
+class ProductRepository implements IProductRepository {
+  async findAll(skip: number, limit: number) {
+    return DummyJsonService.get<IProducts>('/products', { params: { limit, skip } });
+  }
+}
+
+// Injeção da dependência concreta
+const productRepository = new ProductRepository();
+const findProductsBySkipUseCase = new FindProductsBySkipUseCase(productRepository);
+```
+
+**Benefício**: É possível trocar a implementação do repositório (ex: de DummyJSON para outra API) sem alterar os casos de uso ou camada de apresentação.
+
+### Múltiplas Fontes de Dados
+
+Com esses padrões é possível trocar APIs facilmente somente configurando o baseUrl, interceptors...:
+
+- **DummyJSON API** ([dummyjson.com](https://dummyjson.com)) - Para listagem de produtos
+- **GitHub API** ([api.github.com](https://api.github.com)) - Para dados de usuário
+
+Cada serviço é uma instância isolada do `HttpProvider` com sua própria configuração base:
+
+```typescript
+// src/shared/services/dummyjson/index.ts
+export default new HttpProvider({ baseURL: 'https://dummyjson.com' });
+
+// src/shared/services/github/index.ts
+export default new HttpProvider({ baseURL: 'https://api.github.com/users' });
+```
+
+Ambos usam a mesma interface, permitindo adicionar novas APIs sem modificar a estrutura existente.
+
+## 🔄 Gerenciamento de Estado e Dados
+
+### React Query (TanStack Query)
+
+O projeto utiliza `@tanstack/react-query` para gerenciamento de estado assíncrono, oferecendo:
+
+- Cache automático de requisições
+- Revalidação em background
+- Otimização de performance
+- Gerenciamento de loading e error states
+
+### Infinite Scroll
+
+Implementado através de `useInfiniteQuery` do React Query na listagem de produtos:
+
+```typescript
+// src/app/modules/product/store/query/products.ts
+export function useProductsStoreQuery() {
+  return useInfiniteQuery<IProducts, Error>({
+    queryKey: ['products'],
+    initialPageParam: 0,
+    queryFn: async ({ pageParam = 0 }) => {
+      const { data } = await findProductsBySkipUseCase.execute(pageParam as number);
+      return data;
+    },
+    getNextPageParam: (lastPage: IProducts) => {
+      const nextSkip = lastPage.skip + lastPage.limit;
+      return nextSkip < lastPage.total ? nextSkip : undefined;
+    },
+    staleTime: 30 * 1000,
+    retry: 1,
+  });
+}
+```
+
+**Benefícios**:
+- Carregamento progressivo de dados
+- Otimização de performance e uso de memória
+- Melhor experiência do usuário em listas longas
+- Pull-to-refresh nativo
+
+## 🎨 Sistema de Temas
+
+Suporte automático a tema claro/escuro baseado nas preferências do sistema:
+
+```typescript
+// src/theme/index.tsx
+export function Theme({ children }: ThemeProps) {
+  const scheme = useColorScheme(); // Detecta preferência do sistema
+
+  const theme = useMemo(() => {
+    const color = schemes[scheme || 'light'];
+    return { color, spacing, typography };
+  }, [scheme]);
+
+  return <ThemeProvider theme={theme}>{children}</ThemeProvider>;
+}
+```
+
+Temas definidos em:
+- [src/theme/color/schemes/light/index.ts](src/theme/color/schemes/light/index.ts)
+- [src/theme/color/schemes/dark/index.ts](src/theme/color/schemes/dark/index.ts)
+
+Com isso é possivel criar novos temas tambem a partir dessa estrutura.
+## 🛠️ Tecnologias
+
+- **React Native** 
+- **Expo** 
+- **TypeScript** 
+- **React Navigation** 
+- **TanStack Query** 
+- **Styled Components** 
+- **Axios** 
+
+## 📦 Path Aliases
+
+Configurados em `tsconfig.json` e `babel.config.js`:
+
+- `@app/*` → Módulos de funcionalidades
+- `@core/*` → Infraestrutura core (routing, HTTP, query)
+- `@theme/*` → Sistema de temas
+- `@shared/*` → Componentes e serviços compartilhados
+
+## Executar app
+
+- Instale as dependências:
 
   ```sh
   npm install
   ```
 
-- Start the development server:
-
-  ```sh
-  npm start
-  ```
-
-- Build and run iOS and Android development builds:
+- Executar
 
   ```sh
   npm run ios
   # or
   npm run android
   ```
-
-- In the terminal running the development server, press `i` to open the iOS simulator, `a` to open the Android device or emulator, or `w` to open the web browser.
-
-## Notes
-
-This project uses a [development build](https://docs.expo.dev/develop/development-builds/introduction/) and cannot be run with [Expo Go](https://expo.dev/go). To run the app with Expo Go, edit the `package.json` file, remove the `expo-dev-client` package and `--dev-client` flag from the `start` script.
-
-We highly recommend using the development builds for normal development and testing.
-
-The `ios` and `android` folder are gitignored in the project by default as they are automatically generated during the build process ([Continuous Native Generation](https://docs.expo.dev/workflow/continuous-native-generation/)). This means that you should not edit these folders directly and use [config plugins](https://docs.expo.dev/config-plugins/) instead. However, if you need to edit these folders, you can remove them from the `.gitignore` file so that they are tracked by git.
-
-## Resources
-
-- [React Navigation documentation](https://reactnavigation.org/)
-- [Expo documentation](https://docs.expo.dev/)
-
----
-
-Demo assets are from [lucide.dev](https://lucide.dev/)
