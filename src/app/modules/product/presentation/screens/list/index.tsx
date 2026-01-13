@@ -1,61 +1,27 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback } from 'react';
 
-import { ActivityIndicator, ListRenderItem } from 'react-native';
+import { ListRenderItem } from 'react-native';
 
 import { ProductCard } from '@app/modules/product/presentation/components/card';
 
-import { useProductsStoreQuery } from '@app/modules/product/store/query/products';
 import { ProductEntity } from '@app/modules/product/domain/entities/product';
 import { Header } from '@app/modules/product/presentation/screens/list/header';
 
 import * as S from './index.styles';
+import { useProductsStore } from '@app/modules/product/hooks/store/product.store';
 
 export function ProductListScreen() {
-  const {
-    data,
-    fetchNextPage,
-    hasNextPage,
-    isFetchingNextPage,
-    refetch,
-    isRefetching,
-    isLoading,
-    isError,
-  } = useProductsStoreQuery();
-
-  const items = useMemo(() => {
-    return data?.pages.flatMap(page => page.products) ?? [];
-  }, [data]);
+  const { data } = useProductsStore();
 
   const renderItem = useCallback<ListRenderItem<ProductEntity>>(({ item }) => {
     return <ProductCard product={item} />;
   }, []);
 
-  const handleEndReached = useCallback(() => {
-    if (hasNextPage && !isFetchingNextPage) {
-      fetchNextPage();
-    }
-  }, [hasNextPage, isFetchingNextPage, fetchNextPage]);
-
-  const ListFooter = useMemo(() => {
-    if (!isFetchingNextPage) return null;
-
-    return <ActivityIndicator />;
-  }, [isFetchingNextPage]);
-
   return (
     <S.Wrapper>
       <Header />
 
-      <S.List
-        data={items}
-        renderItem={renderItem}
-        refreshing={isRefetching}
-        onRefresh={refetch}
-        onEndReached={handleEndReached}
-        onEndReachedThreshold={0.5}
-        keyExtractor={item => item.id.toString()}
-        ListFooterComponent={ListFooter}
-      />
+      <S.List data={data} renderItem={renderItem} keyExtractor={item => item.id} />
     </S.Wrapper>
   );
 }

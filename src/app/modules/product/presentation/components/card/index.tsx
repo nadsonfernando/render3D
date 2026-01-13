@@ -1,5 +1,3 @@
-import { useMemo } from 'react';
-
 import { ProductEntity } from '@app/modules/product/domain/entities/product';
 
 import * as S from './index.styles';
@@ -17,29 +15,11 @@ export function ProductCard({ product }: ProductCardProps) {
     nav.go.detail(product);
   }
 
-  const price = useMemo(() => {
-    return `R$ ${product.price}`;
-  }, [product.price]);
-
   return (
     <S.Wrapper onPress={onPress}>
-      <S.LeftImage source={{ uri: product.thumbnail }} resizeMode="cover" />
-
-      <S.Content>
-        <S.Title color="textPrimary" variation="lg-b">
-          {product.title}
-        </S.Title>
-
-        <S.Brand color="textSecondary" variation="sm-r">
-          {product.brand}
-        </S.Brand>
-
-        <S.Price color="primary" variation="sm-b">
-          {price}
-        </S.Price>
-
-        <S.FooterRating value={product.rating.toFixed(1)} />
-      </S.Content>
+      <S.Title color="textPrimary" variation="lg-b">
+        {product.name}
+      </S.Title>
     </S.Wrapper>
   );
 }

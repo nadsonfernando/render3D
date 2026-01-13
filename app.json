@@ -1,23 +1,23 @@
 {
   "expo": {
-    "name": "plein-air",
-    "slug": "plein-air",
+    "name": "render3D",
+    "slug": "render3D",
     "version": "1.0.0",
     "orientation": "default",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
-    "scheme": "pleinair",
+    "scheme": "render3D",
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.pleinair"
+      "bundleIdentifier": "com.render3D"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "package": "com.pleinair"
+      "package": "com.render3D"
     },
     "web": {
       "favicon": "./assets/favicon.png"

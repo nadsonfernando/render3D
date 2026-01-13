@@ -6,7 +6,6 @@ import * as SplashScreen from 'expo-splash-screen';
 
 import { Theme } from '@theme/index';
 import { AppRoute } from '@app/route';
-import { Query } from '@core/providers/query';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -16,10 +15,8 @@ export function App() {
   }, []);
 
   return (
-    <Query>
-      <Theme>
-        <AppRoute />
-      </Theme>
-    </Query>
+    <Theme>
+      <AppRoute />
+    </Theme>
   );
 }
