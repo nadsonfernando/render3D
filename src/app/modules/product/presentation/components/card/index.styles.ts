@@ -7,7 +7,7 @@ export const Wrapper = styled.TouchableOpacity.attrs({
 })`
   padding: ${({ theme }) => theme.spacing.padding.lg}px;
   margin: ${({ theme }) => theme.spacing.margin.xs}px ${({ theme }) => theme.spacing.padding.lg}px;
-  background-color: ${({ theme }) => theme.color.surface};
+  background-color: ${({ theme }) => theme.color.primary};
   border-radius: ${({ theme }) => theme.spacing.borderRadius.lg}px;
   flex-direction: row;
 `;

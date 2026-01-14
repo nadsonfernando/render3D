@@ -1,7 +1,7 @@
 import { SchemaColors } from '@theme/color/schemes/types/colors';
 
 export const lightSchemaColor: SchemaColors = {
-  primary: '#22C55E',
+  primary: '#e8e8e8',
   white: '#FFFFFF',
   background: '#F3F4F6',
   textPrimary: '#111827',

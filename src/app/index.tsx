@@ -3,6 +3,7 @@ import { useLayoutEffect } from 'react';
 import React from 'react';
 
 import * as SplashScreen from 'expo-splash-screen';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 import { Theme } from '@theme/index';
 import { AppRoute } from '@app/route';
@@ -15,8 +16,10 @@ export function App() {
   }, []);
 
   return (
-    <Theme>
-      <AppRoute />
-    </Theme>
+    <GestureHandlerRootView style={{ flex: 1 }}>
+      <Theme>
+        <AppRoute />
+      </Theme>
+    </GestureHandlerRootView>
   );
 }
