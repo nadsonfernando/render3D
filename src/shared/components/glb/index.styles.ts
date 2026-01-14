@@ -24,5 +24,5 @@ export const ZoomButton = styled.TouchableOpacity`
 export const ZoomButtonText = styled.Text`
   font-size: 24px;
   font-weight: bold;
-  color: ${({ theme }) => theme.color.white};
+  color: ${({ theme }) => theme.color.textSecondary};
 `;
