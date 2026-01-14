@@ -25,9 +25,6 @@ yarn ios
 
 # Run on Android
 yarn android
-
-# Run on web
-yarn web
 ```
 
 ## Architecture & Design Patterns
@@ -60,8 +57,6 @@ This modular approach aligns the code structure with business domains, making it
 The codebase adheres to SOLID principles:
 
 - **Single Responsibility** - Each class/module has one reason to change (e.g., repositories only handle data access)
-- **Open/Closed** - Entities and use cases are open for extension but closed for modification
-- **Liskov Substitution** - Repository implementations can be substituted without breaking the code
 - **Interface Segregation** - Repository interfaces are focused and specific to their domain
 - **Dependency Inversion** - Use cases depend on repository interfaces (abstractions), not concrete implementations
 
@@ -69,7 +64,6 @@ The codebase adheres to SOLID principles:
 
 - **Meaningful Names** - Variables, functions, and components have descriptive names
 - **Small Functions** - Functions do one thing and do it well
-- **Colocation** - Related files (component + styles) are kept together
 - **Path Aliases** - Clean imports using `@app`, `@shared`, `@theme`, etc.
 - **Type Safety** - TypeScript with strict mode for better code quality
 
