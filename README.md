@@ -2,6 +2,10 @@
 
 A React Native Expo application for viewing and interacting with 3D models of real estate properties.
 
+# Demo
+https://github.com/user-attachments/assets/09b0b587-30f4-4cf1-aab2-959e13b33d26
+
+
 ## Overview
 
 This app showcases real estate products with interactive 3D models (GLB format) using `react-native-filament`. Users can browse a catalog of properties and interact with 3D models through intuitive gestures.
